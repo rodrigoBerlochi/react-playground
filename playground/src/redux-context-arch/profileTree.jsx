@@ -39,28 +39,68 @@ const ProfileList = withProfileContext(List);
  * which knows only about props and will serve for
  * testing changes to the State
  */
-const _Updater = (props) => {
+const ProfileForm = (props) => {
 
-    const values = getValueProperties(props);
+    const propsValues = getValueProperties(props);
     const actions = getMethodProperties(props);
 
-    const refInput = React.createRef();
 
+    // below we see that State is modified strictly in a Redux way
+    // without passing for the Context
+    // From React: "Context is designed to share data that can be considered “global” 
+    // for a tree of React components, such as the current authenticated user, theme, 
+    // or preferred language."
 
     return (
-        <Fragment>
+        <form>
+        {propsValues.map((item) => {
+            return (
+                <Fragment key={item[0]}>
+                    <input type={'text'} placeholder={'Change ' + item[0]} onChange={(e) => {
+                        const nextVal = e.currentTarget.value;
 
-            <input type={'text'}  ref={refInput}/>
-            <input type={'button'} value={'Change Name'} onClick={(e) => {
-                e.preventDefault();
-                const val = refInput.current.value;
-                actions.setName(val);
-            }} />
-        </Fragment>
+                        switch(item[0]) {
+                            case 'name':
+                                actions.setName(nextVal);
+                            break;
+                            case 'surname':
+                                actions.setSurname(nextVal);
+                            break;
+                            case 'company':
+                                actions.setCompany(nextVal);
+                            break;
+                            default:
+                                // nothig 
+                        }
+                    }}/>
+                </Fragment>
+            );
+        })}
+        </form>
     );
 }
 
-const ProfileUpdater = withProfileContext(_Updater);
+const ProfileFormBinded = withProfileContext(ProfileForm);
+
+/**
+ * 
+ * This component just shows like we can add more and more
+ * nesting levels without the need of passing down props for children
+ * nor the need of connecting nested levels to Redux 
+ */
+const VisFrame = ({children}) => {
+    const styles = {
+        border: '1px solid lightblue',
+        borderRadius: 5,
+        backgroundColor: 'lightblue',
+        margin: 10
+    };
+    return (
+        <div style={styles}>
+            {children}
+        </div>
+    );
+};
 
 // all presentational components binded to a context, 
 // must be wrapped by the container matching that context,
@@ -71,8 +111,10 @@ export const ProfileTree = () => {
     // That benefit is more visible when we have a UI tree here of several levels and multiple components 
     return (
         <ProfileContainer>
-            <ProfileList />
-            <ProfileUpdater />
+            <VisFrame>
+                <ProfileList />
+                <ProfileFormBinded />
+            </VisFrame>
         </ProfileContainer>
     );
 };

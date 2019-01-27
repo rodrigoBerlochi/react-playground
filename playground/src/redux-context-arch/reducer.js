@@ -10,6 +10,10 @@ const profileReducer = (state = defaultStateProfile, action) => {
     switch (action.type) {
         case 'SET_NAME':
             return {...state, ...{name: action.value}}
+        case 'SET_SURNAME':
+            return {...state, ...{surname: action.value}}
+        case 'SET_COMPANY':
+            return {...state, ...{company: action.value}}
         default:
             return state;
     }
