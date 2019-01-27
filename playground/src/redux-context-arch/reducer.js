@@ -19,8 +19,14 @@ const profileReducer = (state = defaultStateProfile, action) => {
     }
 };
 
-const jobHistoryReducer = (state = {}, action) => {
+const defaultJobHistory = {
+    previousJobs: []
+}
+
+const jobHistoryReducer = (state = defaultJobHistory, action) => {
     switch (action.type) {
+        case 'ADD_JOB':
+            return {...state, previousJobs: Array.prototype.concat(state.previousJobs, action.value)};
         default:
             return state;
     }

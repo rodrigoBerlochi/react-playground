@@ -50,6 +50,12 @@ const ProfileForm = (props) => {
     // From React: "Context is designed to share data that can be considered “global” 
     // for a tree of React components, such as the current authenticated user, theme, 
     // or preferred language."
+    // Currently I don't like the idea of components that also UPDATE properties of the Context
+    // because that mean having several "states" in the app, in other words, missing the single source of truth
+    // the global state and each one of the severals contexts we can have, could diverge, and that'd make
+    // debugging and developing more complex. And at some point, a nightmare. 
+    // I prefer keeping Redux doing what it is really good to do, and use Context to solve props drilling and
+    // all those problems regarding passing values in deep trees of components
 
     return (
         <form>

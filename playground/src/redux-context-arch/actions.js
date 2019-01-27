@@ -17,3 +17,9 @@ export const setCompany = (value) => ({
     type: 'SET_COMPANY',
     value
 });
+
+// job history reducer actions
+export const setJob = (value) => ({
+    type: 'ADD_JOB',
+    value
+});

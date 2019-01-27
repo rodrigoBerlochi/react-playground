@@ -98,3 +98,46 @@ const mapDispatch = {
 
 // think about Dispatch. Define methods here or make it avail for nested? as context?
 export const ProfileContainer = connect(mapState, mapDispatch)(innerProfileContainer);
+
+
+/**
+ * Let's do the same for the other state domain: the job history
+ */
+
+ // create the context
+ const HistoryContext = createContext();
+
+ // create the HOC for the consumer
+ export const withHistoryContext = (Component) => {
+    return function WrapperComponent (props) {
+        return (
+            <HistoryContext.Consumer>
+                {context => {
+                    return <Component {...props} {...context} />
+                }}
+            </HistoryContext.Consumer>
+        );
+    }
+ }
+
+ // create the specific container for this context
+ class innerHistoryContainer extends Component {
+     render () {
+        const {Provider} = HistoryContext;
+        const {children, ...restProps} = this.props;
+
+        return (
+            <Provider value={{...restProps}}>
+                {children}
+            </Provider>
+        ); 
+     }
+ }
+
+ // define the slice of the state we need for this container
+const mapStateHistory = (state) => ({
+    previousJobs: state.jobHistoryReducer.previousJobs
+});
+
+ // connect to global state and export
+ export const HistoryContainer = connect(mapStateHistory)(innerHistoryContainer);
